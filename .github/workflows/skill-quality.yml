@@ -1,0 +1,36 @@
+name: Skill Quality
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      run_parity:
+        description: "Run parity smoke checks against docs/security/parity artifacts"
+        required: false
+        default: "false"
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install shellcheck
+        run: sudo apt-get update && sudo apt-get install -y shellcheck
+      - name: Shellcheck scripts
+        run: shellcheck scripts/*.sh
+      - name: Lint skill contracts
+        run: ./scripts/lint-skill.sh
+
+  parity-smoke:
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.run_parity == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run parity smoke checks
+        run: ./scripts/parity-smoke.sh

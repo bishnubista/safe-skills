@@ -1,0 +1,13 @@
+{
+  "name": "safe-skills",
+  "version": "0.1.0",
+  "description": "SAFE-T-first security scanning adapters for LLM-powered applications, with OWASP LLM/Agentic and agentic controls as secondary mappings.",
+  "author": {
+    "name": "safe-mcp-projects"
+  },
+  "repository": "https://github.com/bishnubista/safe-skills",
+  "license": "Apache-2.0",
+  "keywords": ["security", "llm", "owasp", "vulnerability", "scanning", "safe-mcp", "mcp", "agent-security"],
+  "skills": "./skills/claude-code/",
+  "commands": "./commands/"
+}
