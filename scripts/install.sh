@@ -283,7 +283,10 @@ if [[ "$PLATFORM_SPECIFIED" -eq 0 ]]; then
     echo "  4) All of the above"
     echo
     read -rp "Enter choices (comma-separated, e.g. 1,2): " choices
-    for choice in $(echo "$choices" | tr ',' ' '); do
+    IFS=',' read -r -a selected_choices <<< "$choices"
+    for raw_choice in "${selected_choices[@]}"; do
+      choice="$(printf '%s' "$raw_choice" | tr -d '[:space:]')"
+      [[ -z "$choice" ]] && continue
       case "$choice" in
         1) INSTALL_CLAUDE=1 ;;
         2) INSTALL_CURSOR=1 ;;

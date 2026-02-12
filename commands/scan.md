@@ -13,5 +13,6 @@ Run a security audit using the `llm-vulnerability-scan` skill.
    - Default: repo scope (tracked files when available)
    - Include local/untracked machine configs only if arguments include `include-local-config`
 3. Run the skill and generate SAFE-T keyed findings.
-4. Save report to `docs/security/llm-vulnerability-report.md`.
-5. Display an executive summary with Severity, Overall Risk, Primary Taxonomy, Scan Type, and Scan Scope.
+4. Redact secret material from snippets/prose (`[REDACTED_SECRET]`).
+5. Save report to `docs/security/llm-vulnerability-report.md`.
+6. Display an executive summary with Severity, Overall Risk, Primary Taxonomy, Scan Type, and Scan Scope.

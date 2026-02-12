@@ -168,10 +168,10 @@ The skill uses the [Agent Skills open standard](https://agentskills.io/specifica
 | Agent | Install Method | Discovery Path | Invocation |
 |-------|---------------|----------------|------------|
 | **Claude Code** | `claude plugin install safe-skills` | Native plugin system | `/safe-skills:scan` or auto-discover |
-| **Cursor** (v2.4+) | `./scripts/install.sh` | `~/.cursor/skills/` | `/llm-vulnerability-scan` or auto-discover |
+| **Cursor** (v2.4+) | `./scripts/install.sh` | `~/.cursor/rules/` | `/llm-vulnerability-scan` or auto-discover |
 | **Codex** | `./scripts/install.sh` | `~/.agents/skills/` | `$llm-vulnerability-scan` or auto-discover |
 
-The install script (`scripts/install.sh`) installs an immutable copy by default (with checksum verification) to each agent's discovery path. It supports `--symlink` for local development, `--symlink --no-verify` for rapid local iteration, and `--force` to replace an existing install during upgrades.
+The install script (`scripts/install.sh`) installs an immutable copy by default (with checksum verification) to each agent's discovery path. It supports `--symlink` for local development, `--symlink --no-verify` for rapid local iteration, and `--force` to replace an existing install during upgrades. The remote bootstrap helper (`scripts/remote-install.sh`) now requires an immutable ref plus an expected archive SHA-256 value (unless explicit unsafe overrides are passed).
 
 #### Project File Structure
 
@@ -179,7 +179,7 @@ The install script (`scripts/install.sh`) installs an immutable copy by default 
 safe-skills/
 ├── CHECKSUMS.sha256                          # Integrity manifest for installer verification
 ├── .github/workflows/
-│   └── skill-quality.yml                     # CI lint + optional parity smoke job
+│   └── skill-quality.yml                     # CI lint + parity smoke job
 ├── .claude-plugin/
 │   └── plugin.json                          # Plugin manifest (name, version, entry points)
 ├── .cursor/rules/
@@ -201,7 +201,7 @@ safe-skills/
 │       └── security-scan.md                 # Cursor rule-based routing
 ├── scripts/
 │   ├── install.sh                           # Cross-agent installer (copy default, symlink optional)
-│   ├── remote-install.sh                    # Curl one-liner installer
+│   ├── remote-install.sh                    # Verified remote bootstrap helper
 │   ├── generate-checksums.sh                # Regenerates CHECKSUMS.sha256
 │   ├── lint-skill.sh                        # Skill contract checks
 │   ├── validate-report.sh                   # Report schema checks
@@ -301,8 +301,9 @@ A thin wrapper that delegates to the skill. Provides the explicit `/scan` invoca
 1. Select scan mode deterministically (`quick` -> Quick, otherwise Full)
 2. Select scope deterministically (repo scope by default; local config only on explicit request)
 3. Run the `llm-vulnerability-scan` skill and generate SAFE-T keyed findings
-4. Save report to `docs/security/llm-vulnerability-report.md`
-5. Display executive summary with Severity, Overall Risk, Scan Type, and Scan Scope
+4. Redact secret material from snippets/prose (`[REDACTED_SECRET]`)
+5. Save report to `docs/security/llm-vulnerability-report.md`
+6. Display executive summary with Severity, Overall Risk, Scan Type, and Scan Scope
 ```
 
 #### SKILL.md (Orchestrator)

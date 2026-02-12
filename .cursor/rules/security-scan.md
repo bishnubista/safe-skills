@@ -11,7 +11,9 @@ Cursor is rule-driven (no first-class `SKILL.md` runtime contract), so this file
 3. Use SAFE-T techniques as the primary taxonomy source.
 4. Use OWASP LLM/Agentic and Agentic Controls as secondary mappings.
 5. Preserve SAFE-T as the primary finding taxonomy, and include (`LLM01-10`, `ASI01-10`, `AC01-05`) as secondary mappings.
-6. Always write `docs/security/llm-vulnerability-report.md` and return an executive summary with Severity, Overall Risk, Scan Type, and Scan Scope.
+6. Redact secrets from report snippets/prose (API keys, bearer tokens, private keys, passwords, cookies, connection strings) and replace values with `[REDACTED_SECRET]`.
+7. If a snippet is mostly secret-bearing, use `[snippet omitted: secret-bearing content]` and keep file path + line evidence.
+8. Always write `docs/security/llm-vulnerability-report.md` and return an executive summary with Severity, Overall Risk, Scan Type, and Scan Scope.
 
 ## Non-Goals
 

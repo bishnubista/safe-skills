@@ -5,3 +5,4 @@ node_modules/
 .project-secrets.md
 .claude/
 .agents/
+docs/security/llm-vulnerability-report.md

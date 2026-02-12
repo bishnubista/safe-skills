@@ -14,36 +14,32 @@ Pick your platform:
 claude plugin add bishnubista/safe-skills
 ```
 
-**Claude Code** (manual):
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/bishnubista/safe-skills/main/scripts/remote-install.sh | bash -s -- --claude
-```
-
-**Codex:**
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/bishnubista/safe-skills/main/scripts/remote-install.sh | bash -s -- --codex
-```
-
-**Cursor:**
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/bishnubista/safe-skills/main/scripts/remote-install.sh | bash -s -- --cursor
-```
-
-**All platforms:**
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/bishnubista/safe-skills/main/scripts/remote-install.sh | bash -s -- --all
-```
-
-**From source** (contributors):
+**From source** (recommended for manual installs):
 
 ```bash
 git clone https://github.com/bishnubista/safe-skills.git && cd safe-skills
-./scripts/install.sh
+./scripts/install.sh --codex
 ```
+
+Use `--claude`, `--cursor`, or `--all` as needed.
+
+**Verified remote bootstrap** (optional):
+
+```bash
+SAFE_SKILLS_REF="<immutable-tag-or-commit>"
+SAFE_SKILLS_ARCHIVE_SHA256="<sha256-from-signed-release-metadata>"
+
+curl -fsSLo /tmp/safe-skills-remote-install.sh \
+  "https://raw.githubusercontent.com/bishnubista/safe-skills/${SAFE_SKILLS_REF}/scripts/remote-install.sh"
+
+bash /tmp/safe-skills-remote-install.sh \
+  --ref "$SAFE_SKILLS_REF" \
+  --archive-sha256 "$SAFE_SKILLS_ARCHIVE_SHA256" \
+  -- --codex
+```
+
+Replace `--codex` with `--claude`, `--cursor`, or `--all`.
+Do not use `curl | bash` and do not use mutable refs like `main`.
 
 ### Install Targets
 
@@ -111,7 +107,7 @@ The scanner runs three phases:
 | 5 | Reliability, Trust and Inter-Agent | SAFE-T2105, SAFE-T1404, SAFE-T2102, SAFE-T1701, SAFE-T1705, SAFE-T1904 |
 | 6 | Agentic Controls and Governance | AC01–AC05 (using SAFE-T evidence) |
 
-**Phase 3 — Report:** Findings are sorted by severity and saved to `docs/security/llm-vulnerability-report.md`.
+**Phase 3 — Report:** Findings are sorted by severity, secret values are redacted, and output is saved to `docs/security/llm-vulnerability-report.md`.
 
 ## Frameworks Covered
 
@@ -128,7 +124,7 @@ Each finding includes:
 
 - **SAFE-T ID** and human-readable title
 - **Severity** (Critical / High / Medium / Low / Informational)
-- **File path and line number** with code snippet
+- **File path and line number** with code snippet (secret-bearing values redacted)
 - **Secondary mappings** to OWASP LLM, OWASP Agentic, and Agentic Controls
 - **Remediation guidance** with applicable SAFE-M mitigations
 
@@ -168,7 +164,7 @@ safe-skills/
 │   └── scan.md                               # /scan slash command (Claude Code)
 ├── scripts/
 │   ├── install.sh                            # Cross-platform installer
-│   ├── remote-install.sh                     # Curl one-liner bootstrap
+│   ├── remote-install.sh                     # Verified remote bootstrap helper
 │   ├── generate-checksums.sh                 # Regenerate CHECKSUMS.sha256
 │   ├── lint-skill.sh                         # Skill contract + parity checks
 │   ├── validate-report.sh                    # Report schema validation
